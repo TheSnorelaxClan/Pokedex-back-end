@@ -4,7 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const { Pokemon, pokemon } = require('./models/pokemon');
+const { Pokemon, pokemon, types } = require('./models/pokemon');
 
 
 mongoose.connect(process.env.DB_URL);
@@ -83,8 +83,8 @@ function getByName(req, res) {
 }
 
 function getByType(req, res) {
-  let name = req.params.type;
-  pokemon(name)
+  let type = req.params.type;
+  types(type)
     .then(summaries => res.send(summaries))
     .catch((error) => {
       console.error(error);
