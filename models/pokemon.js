@@ -20,7 +20,24 @@ async function getByName(name) {
   const key = 'pokemon: ' + objName;
   const url = `https://api.pokemontcg.io/v2/cards?X-Api-Key=${process.env.Pokemon_API_Key}&q=name:${objName}`;
 
-  if (cache[key] && (Date.now() - cache[key].timestamp < 50000)) {
+  if (cache[key] && (Date.now() - cache[key].timestamp < 3600000)) {
+    console.log('Cache hit');
+  } else {
+    console.log('Cache miss');
+    cache[key] = {};
+    cache[key].timestamp = Date.now();
+    cache[key].data = await axios.get(url)
+      .then(response => parseResults(response.data));
+  }
+  return cache[key].data;
+}
+
+async function getByType(type) {
+  let objType = type;
+  const key = 'type: ' + objType;
+  const url = `https://api.pokemontcg.io/v2/types?X-Api-Key=${process.env.Pokemon_API_Key}&q=name:${objType}`;
+
+  if (cache[key] && (Date.now() - cache[key].timestamp < 3600000)) {
     console.log('Cache hit');
   } else {
     console.log('Cache miss');
@@ -52,4 +69,5 @@ class Pokemon {
   }
 }
 
-module.exports= getByName, PokemonModel;
+exports.Pokemon = PokemonModel;
+exports.pokemon = getByName;
