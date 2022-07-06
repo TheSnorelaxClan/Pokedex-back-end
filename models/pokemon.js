@@ -32,10 +32,10 @@ async function getByName(name) {
   return cache[key].data;
 }
 
-async function getByType(type) {
-  let objType = type;
-  const key = 'type: ' + objType;
-  const url = `https://api.pokemontcg.io/v2/types?X-Api-Key=${process.env.Pokemon_API_Key}&q=name:${objType}`;
+async function getByType(types) {
+  let objTypes = types;
+  const key = 'type: ' + objTypes;
+  const url = `https://api.pokemontcg.io/v2/cards?X-Api-Key=${process.env.Pokemon_API_Key}&q=types:${objTypes}`;
 
   if (cache[key] && (Date.now() - cache[key].timestamp < 3600000)) {
     console.log('Cache hit');
@@ -71,3 +71,4 @@ class Pokemon {
 
 exports.Pokemon = PokemonModel;
 exports.pokemon = getByName;
+exports.types = getByType;
