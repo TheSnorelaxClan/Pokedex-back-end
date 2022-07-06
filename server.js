@@ -4,8 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const Pokemon = require('./models/pokemon');
-const pokemon = require('./models/pokemon')
+const { Pokemon, pokemon } = require('./models/pokemon');
 
 
 mongoose.connect(process.env.DB_URL);
@@ -31,8 +30,8 @@ app.get('/pokemon', getPokemon);
 app.post('/pokemon', postPokemon);
 app.put('/pokemon/:id', putPokemon);
 app.delete('/pokemon/:id', deletePokemon);
-app.get('/getname', getByName);
-// app.get('/gettype', getByType);
+app.get('/getname/:name', getByName);
+app.get('/gettype/:type', getByType);
 
 async function getPokemon(req,res,next){
   try{
@@ -80,6 +79,16 @@ function getByName(req, res) {
     .catch((error) => {
       console.error(error);
       res.status(500).send('Sorry. Can\'t find that pokemon!');
+    });
+}
+
+function getByType(req, res) {
+  let name = req.params.type;
+  pokemon(name)
+    .then(summaries => res.send(summaries))
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Sorry, trouble finding that type!');
     });
 }
 
