@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const { Pokemon, pokemon, types } = require('./models/pokemon');
+const Team = require('./models/team');
 
 
 mongoose.connect(process.env.DB_URL);
@@ -27,6 +28,7 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/pokemon', getPokemon);
+app.get('/team', getTeam);
 app.post('/pokemon', postPokemon);
 app.put('/pokemon/:id', putPokemon);
 app.delete('/pokemon/:id', deletePokemon);
@@ -36,6 +38,15 @@ app.get('/gettype/:type', getByType);
 async function getPokemon(req,res,next){
   try{
     let results=await Pokemon.find();
+    res.status(200).send(results);
+  }catch(error){
+    next(error);
+  }
+}
+
+async function getTeam(req,res,next){
+  try{
+    let results=await Team.find();
     res.status(200).send(results);
   }catch(error){
     next(error);
@@ -55,7 +66,7 @@ async function putPokemon(req,res,next){
   let id=req.params.id;
   try{
     let data = req.body;
-    let updatedPokemon = await Pokemon.findByIdAndUpdate(id, data, { new: true, overwrite: true });
+    let updatedPokemon = await Team.findByIdAndUpdate(id, data, { new: true, overwrite: true });
     res.status(200).send(updatedPokemon);
   }catch(error){
     next(error);
