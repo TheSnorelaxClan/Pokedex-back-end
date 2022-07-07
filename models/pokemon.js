@@ -8,7 +8,7 @@ const { Schema } = mongoose;
 
 const pokemonSchema=new Schema({
   name: {type: String, required: true},
-  type: {type: String, required: true},
+  types: {type: Array, required: true},
   id: {type: String, required: true},
   img: {type: String, required: true}
 })
